@@ -3,7 +3,7 @@ const path = require('path');
 
 const helmet = require('helmet');
 const nocache = require('nocache');
-const cors = rquire('cors');
+const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const xssClean = require('xss-clean');
 
@@ -21,6 +21,9 @@ const limiter = rateLimit({
     message: "Vous avez réalisé trop de requêtes !"
 })
 
+//Synchronisation de la base de données grâce à Sequelize
+dataBase.sequelize.sync();
+
 //Remplacer le body-parser : transforme les données arrivant à la requête POST en objet JSON facilement exploitable
 app.use(express.json());
 
@@ -29,6 +32,9 @@ app.use(helmet());
 
 //Désactiver la mise en cache du navigateur
 app.use(nocache());
+
+//Images
+app.use("./images", express.static(path.join(__dirname, "images")));
 
 //Ajouter notre limite de requêtes par @IP
 app.use('/api', limiter);
