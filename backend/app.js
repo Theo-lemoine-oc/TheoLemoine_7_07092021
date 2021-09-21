@@ -44,5 +44,8 @@ app.use('/api', limiter);
 //Permettre de se protéger contre les attaques XSS
 app.use(xssClean());
 
+//Routes
+//app.use('/api/auth', userRoutes); TODO
+
 //Export de l'application Express pour déclaration dans le server.js
 module.exports = app;
