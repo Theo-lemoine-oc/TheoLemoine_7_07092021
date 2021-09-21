@@ -7,6 +7,8 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const xssClean = require('xss-clean');
 
+const userRoutes = require('./routes/user');
+
 //Utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données grâce à une variable d'environnement
 require('dotenv').config();
 
@@ -45,7 +47,7 @@ app.use('/api', limiter);
 app.use(xssClean());
 
 //Routes
-//app.use('/api/auth', userRoutes); TODO
+app.use('/api/auth', userRoutes);
 
 //Export de l'application Express pour déclaration dans le server.js
 module.exports = app;
