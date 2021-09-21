@@ -7,6 +7,11 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const xssClean = require('xss-clean');
 
+//Utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données grâce à une variable d'environnement
+require('dotenv').config();
+
+//Connexion à la base de données
+require("./Database");
 
 //Création de l'application Express
 const app = express();
@@ -20,9 +25,6 @@ const limiter = rateLimit({
     windowMs: 60 * 60 * 1000,
     message: "Vous avez réalisé trop de requêtes !"
 })
-
-//Synchronisation de la base de données grâce à Sequelize
-dataBase.sequelize.sync();
 
 //Remplacer le body-parser : transforme les données arrivant à la requête POST en objet JSON facilement exploitable
 app.use(express.json());
