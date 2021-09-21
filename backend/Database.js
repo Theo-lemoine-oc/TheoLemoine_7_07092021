@@ -8,7 +8,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
 });
 
 sequelize
-    .authenticate()
+    .sync({ alter: process.env.NODE_ENV === "dev" })
     .then(() => {
         console.log("La connexion a bien été établié !");
     })
