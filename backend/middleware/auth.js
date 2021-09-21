@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
         //récupération du token dans le header de la requête d'autorisation
         const token = req.headers.authorization.split(' ')[1];
         //vérifie le token décodé avec la clé secrète initiée avec la création du token encodé initialement, on vérifie que les clés correspondent
-        const decodedToken = jwt.verify(token, process.env.TOKEN_JWT);
+        const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
         //vérification que l'userId envoyé dans la requête correspond bien au userId encodé dans le token
         const userId = decodedToken.userId;
         if (req.body.userId && req.body.userId !== userId) {
