@@ -3,10 +3,15 @@ const path = require('path');
 
 const helmet = require('helmet');
 const nocache = require('nocache');
-const cors = rquire('cors');
+const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const xssClean = require('xss-clean');
 
+//Utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données grâce à une variable d'environnement
+require('dotenv').config();
+
+//Connexion à la base de données
+require("./Database");
 
 //Création de l'application Express
 const app = express();
@@ -29,6 +34,9 @@ app.use(helmet());
 
 //Désactiver la mise en cache du navigateur
 app.use(nocache());
+
+//Images
+app.use("./images", express.static(path.join(__dirname, "images")));
 
 //Ajouter notre limite de requêtes par @IP
 app.use('/api', limiter);
