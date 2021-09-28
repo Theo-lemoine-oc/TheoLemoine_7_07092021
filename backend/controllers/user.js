@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cryptJs = require('crypto-js');
 
-const User = require('../models/User');
+const User = require('../database/user');
 
 //Inscription
 exports.signup = (req, res, next) => {
