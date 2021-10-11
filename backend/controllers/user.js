@@ -1,57 +1,82 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const cryptJs = require('crypto-js');
+const jwtUtils = require('../utils/jwt.utils');
 
-const User = require('../models/User');
+const User = require('../models');
 
 //Inscription
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)
-        .then(hash => {
-            const user = new User({
-                //Chiffrement de l'email
-                email: cryptJs.HmacSHA512(req.body.email, process.env.TOKEN_JWT).toString(cryptJs.enc.Base64),
-                //Hashage du mot de passe
-                password: hash
-            });
-            //Enregistrement de l'utilisateur dans la base de données
-            user.save()
-                .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-                .catch(error => res.status(400).json({ error }));
+    var email = req.body.email;
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var password = req.body.password;
+    var bio = req.body.bio;
+
+    if (email == null || username == null || password == null) {
+        return res.status(400).json({ 'error': 'missing parameters' });
+    }
+
+    models.User.findOne({
+            attribute: ['email'],
+            where: { email: email }
         })
-        .catch(error => res.status(500).json({ error }));
+        .then(function(userFound) {
+            if (!userFound) {
+                bcrypt.hash(password, 5, function(err, bcryptedPassword) {
+                    var newUser = models.User.create({
+                            email: email,
+                            firstName: firstName,
+                            lastname: lastname,
+                            password: password,
+                            bio: bio,
+                            isAdmin: 0
+                        })
+                        .then(function(newUser) {
+                            return res.status(201).json({
+                                'userId': newUser.id
+                            })
+                        })
+                        .catch(function(err) {
+                            return res.status(500).json({ 'error': 'cannot add user' });
+                        });
+                });
+            } else {
+                return res.status(409).json({ 'error': 'user already exist' });
+            }
+        })
+        .catch(function(err) {
+            return res.status(500).json({ 'error': 'unable to verify user' });
+        })
 };
 
 //Connexion
 exports.login = (req, res, next) => {
-    //Vérifie que l'email ou que le mot de passe a bien été saisi
-    if ((!req.body.email || req.body.email.trim().length === 0) || (!req.body.password || req.body.password.trim().length === 0)) {
-        return res.status(401).json();
+    var email = req.body.email;
+    var password = req.body.password;
+
+    if (email == null || password == null) {
+        return res.status(400).json({ 'error': 'missing parameters' });
     }
 
-    //Récupérer l'email chiffré dans la variable email
-    const email = cryptJs.HmacSHA512(req.body.email, process.env.TOKEN_JWT).toString(cryptJs.enc.Base64);
-    //Recherche de l'utilisateur
-    User.findOne({ email: email })
-        .then(user => {
-            if (!user) {
-                return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-            }
-            //Vérifie le mot de passe
-            bcrypt.compare(req.body.password, user.password)
-                .then(valid => {
-                    if (!valid) {
-                        return res.status(401).json({ error: 'Mot de passe incorrect !' });
-                    }
-                    //Toutes les informations sont bonnes :
-                    res.status(200).json({
-                        userId: user._id,
-                        token: jwt.sign({ userId: user._id },
-                            process.env.TOKEN_JWT, { expiresIn: '24h' }
-                        )
-                    });
-                })
-                .catch(error => res.status(500).json({ error }));
+    models.User.findOne({
+            where: { email: email }
         })
-        .catch(error => res.status(500).json({ error }));
+        .then(function(userFound) {
+            if (userFound) {
+                bcrypt.compare(password, userFound.password, function(errBycrypt, resBycrypt) {
+                    if (resBycrypt) {
+                        return res.status(200).json({
+                            'userId': userFound.id,
+                            'token': jwtUtils.generateTokenForUser(userFound)
+                        });
+                    } else {
+                        return res.status(403).json({ 'error': 'invalid password' });
+                    }
+                });
+            } else {
+                return res.status(404).json({ 'error': 'user not exist in DB' });
+            }
+        })
+        .catch(function(err) {
+            return res.status(500).json({ 'error': 'unable to verify user' });
+        })
 };
