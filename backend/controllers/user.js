@@ -73,7 +73,7 @@ exports.signup = (req, res, next) => {
                 .catch(function(err) {
                     return res.status(500).json({ 'error': 'cannot add user' });
                 });
-        }
+        },
     ], function(newUser) {
         if (newUser) {
             return res.status(201).json({
@@ -122,7 +122,7 @@ exports.login = (req, res, next) => {
             } else {
                 return res.status(403).json({ 'error': 'invalid password' });
             }
-        }
+        },
     ], function(userFound) {
         if (userFound) {
             return res.status(201).json({

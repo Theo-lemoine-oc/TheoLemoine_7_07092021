@@ -8,6 +8,7 @@ const rateLimit = require('express-rate-limit');
 const xssClean = require('xss-clean');
 
 const userRoutes = require('./routes/user');
+const messageRoutes = require('./routes/message');
 
 //Utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données grâce à une variable d'environnement
 require('dotenv').config();
@@ -48,6 +49,7 @@ app.use(xssClean());
 
 //Routes
 app.use('/api/auth', userRoutes);
+app.use('/api/message', messageRoutes);
 
 //Export de l'application Express pour déclaration dans le server.js
 module.exports = app;
