@@ -95,26 +95,108 @@ exports.login = (req, res, next) => {
         return res.status(400).json({ 'error': 'missing parameters' });
     }
 
-    models.User.findOne({
-            where: { email: email }
-        })
-        .then(function(userFound) {
+    asyncLib.waterfall([
+        function(done) {
+            models.User.findOne({
+                    where: { email: email }
+                })
+                .then(function(userFound) {
+                    done(null, userFound);
+                })
+                .catch(function(err) {
+                    return res.status(500).json({ 'error': 'unable to verify user' });
+                });
+        },
+        function(userFound, done) {
             if (userFound) {
                 bcrypt.compare(password, userFound.password, function(errBycrypt, resBycrypt) {
-                    if (resBycrypt) {
-                        return res.status(200).json({
-                            'userId': userFound.id,
-                            'token': jwtUtils.generateTokenForUser(userFound)
-                        });
-                    } else {
-                        return res.status(403).json({ 'error': 'invalid password' });
-                    }
+                    done(null, userFound, resBycrypt);
                 });
             } else {
                 return res.status(404).json({ 'error': 'user not exist in DB' });
             }
-        })
-        .catch(function(err) {
-            return res.status(500).json({ 'error': 'unable to verify user' });
-        })
+        },
+        function(userFound, resBycrypt, done) {
+            if (resBycrypt) {
+                done(userFound);
+            } else {
+                return res.status(403).json({ 'error': 'invalid password' });
+            }
+        }
+    ], function(userFound) {
+        if (userFound) {
+            return res.status(201).json({
+                'userId': userFound.id,
+                'token': jwtUtils.generateTokenForUser(userFound)
+            });
+        } else {
+            return res.status(500).json({ 'error': 'cannot log on user' });
+        }
+    });
+};
+
+//Récupérer un profil
+exports.getUserProfile = (req, res, next) => {
+    // Getting auth header
+    var headerAuth = req.headers['authorization'];
+    var userId = jwtUtils.getUserId(headerAuth);
+
+    if (userId < 0)
+        return res.status(400).json({ 'error': 'wrong token' });
+
+    models.User.findOne({
+        attributes: ['id', 'email', 'firstName', 'lastName', 'bio'],
+        where: { id: userId }
+    }).then(function(user) {
+        if (user) {
+            res.status(201).json(user);
+        } else {
+            res.status(404).json({ 'error': 'user not found' });
+        }
+    }).catch(function(err) {
+        res.status(500).json({ 'error': 'cannot fetch user' });
+    });
+};
+
+//Modification d'un profil
+exports.updateUserProfile = (req, res, next) => {
+    // Getting auth header
+    var headerAuth = req.headers['authorization'];
+    var userId = jwtUtils.getUserId(headerAuth);
+
+    // Params
+    var bio = req.body.bio;
+
+    asyncLib.waterfall([
+        function(done) {
+            models.User.findOne({
+                    attributes: ['id', 'bio'],
+                    where: { id: userId }
+                }).then(function(userFound) {
+                    done(null, userFound);
+                })
+                .catch(function(err) {
+                    return res.status(500).json({ 'error': 'unable to verify user' });
+                });
+        },
+        function(userFound, done) {
+            if (userFound) {
+                userFound.update({
+                    bio: (bio ? bio : userFound.bio)
+                }).then(function() {
+                    done(userFound);
+                }).catch(function(err) {
+                    res.status(500).json({ 'error': 'cannot update user' });
+                });
+            } else {
+                res.status(404).json({ 'error': 'user not found' });
+            }
+        },
+    ], function(userFound) {
+        if (userFound) {
+            return res.status(201).json(userFound);
+        } else {
+            return res.status(500).json({ 'error': 'cannot update user profile' });
+        }
+    });
 };
