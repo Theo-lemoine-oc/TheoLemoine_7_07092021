@@ -29,6 +29,7 @@ export default {
     buildModules: [
         // https://go.nuxtjs.dev/tailwindcss
         '@nuxtjs/tailwindcss',
+        '@nuxtjs/google-fonts'
     ],
 
     // Modules: https://go.nuxtjs.dev/config-modules
@@ -46,6 +47,20 @@ export default {
             'brands': true
         }
     },
+
+
+    googleFonts: {
+        display: 'swap',
+        download: true,
+        overwriting: false,
+        inject: true,
+        families: {
+            Nunito: {
+                wght: [400, 700]
+            },
+        }
+    },
+
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {},
