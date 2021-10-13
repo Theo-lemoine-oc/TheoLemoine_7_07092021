@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwtUtils = require('../utils/jwt.utils');
 const asyncLib = require('async');
 
-const User = require('../models');
+const models = require('../models');
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/;
@@ -59,7 +59,7 @@ exports.signup = (req, res, next) => {
             }
         },
         function(userFound, bcryptedPassword, done) {
-            var newUser = mdels.User.create({
+            var newUser = models.User.create({
                     email: email,
                     firstName: firstName,
                     lastName: firstName,
