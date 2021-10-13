@@ -48,7 +48,6 @@ export default {
         }
     },
 
-
     googleFonts: {
         display: 'swap',
         download: true,
@@ -60,7 +59,6 @@ export default {
             },
         }
     },
-
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {},
