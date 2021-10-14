@@ -1,7 +1,11 @@
 <template>
-
+    <Navbar />
 </template>
 
 <script>
-export default {}
+    import Navbar from '~/components/navbar/Navbar.vue';
+
+    export default {
+        Navbar
+    }
 </script>
