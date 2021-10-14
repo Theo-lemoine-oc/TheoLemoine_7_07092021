@@ -6,13 +6,13 @@ const TITLE_LIMIT = 2;
 const CONTENT_LIMIT = 4;
 
 exports.createMessage = (req, res, next) => {
-    // Getting auth header
+    //getting auth header
     var headerAuth = req.headers['authorization'];
     var userId = jwtUtils.getUserId(headerAuth);
 
-    //Params
-    var title = reqbody.title;
-    var content = reqbody.content;
+    //params
+    var title = req.body.title;
+    var content = req.body.content;
 
     if (title == null || content == null) {
         return res.status(400).json({ 'error': 'missing parameters' });
@@ -50,7 +50,7 @@ exports.createMessage = (req, res, next) => {
             }
         },
     ], function(newMessage) {
-        if (newmessage) {
+        if (newMessage) {
             return res.status(201).json(newMessage);
         } else {
             return res.status(500).json({ 'error': 'cannot post message' });
