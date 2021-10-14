@@ -9,6 +9,7 @@ const xssClean = require('xss-clean');
 
 const userRoutes = require('./routes/user');
 const messageRoutes = require('./routes/message');
+const likesRoutes = require('./routes/likes');
 
 //Utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données grâce à une variable d'environnement
 require('dotenv').config();
@@ -49,7 +50,8 @@ app.use(xssClean());
 
 //Routes
 app.use('/api/auth', userRoutes);
-app.use('/api/message', messageRoutes);
+app.use('/api/message/', messageRoutes);
+app.use('/api/message/:messageId', likesRoutes);
 
 //Export de l'application Express pour déclaration dans le server.js
 module.exports = app;
