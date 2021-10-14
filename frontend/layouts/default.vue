@@ -10,3 +10,9 @@
         
     }
 </script>
+
+<style>
+    * {
+        font-family: 'Nunito';
+    }
+</style>
