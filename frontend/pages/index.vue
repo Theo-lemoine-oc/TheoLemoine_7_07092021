@@ -1,7 +1,9 @@
 <template>
     <main>
         <Navbar />
-        <IndexContent />
+        <div class="flex justify-center py-8 bg-gray-50">
+            <IndexContent />
+        </div>
     </main>
 </template>
 
