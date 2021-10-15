@@ -1,7 +1,7 @@
 <template>
     <header>
             <!-- navbar content --> 
-            <nav class="bg-transparent shadow-md fixed w-screen px-8">
+            <nav class="bg-transparent shadow-md px-8">
                 <div class="mx-auto py-4">
                     <div class="flex justify-between items-center">
 
