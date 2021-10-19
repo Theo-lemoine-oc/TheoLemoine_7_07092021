@@ -1,9 +1,9 @@
 <template>
     <section class="flex justify-center items-center w-screen h-screen relative overflow-hidden">
         <!-- background blur effect -->
-        <div class="blur-1 w-full h-full max-w-sm max-h-40 absolute blur bg-white opacity-10 rounded-xl"></div>
-        <div class="blur-2 w-full h-full max-w-sm max-h-40 absolute blur bg-white opacity-10 rounded-xl"></div>
-        <div class="blur-3 w-full h-full max-w-sm max-h-40 absolute blur bg-black opacity-10 rounded-xl"></div>
+        <div class="blur-1 w-full h-full max-w-sm max-h-40 absolute bg-white opacity-10 rounded-xl"></div>
+        <div class="blur-2 w-full h-full max-w-sm max-h-40 absolute bg-white opacity-10 rounded-xl"></div>
+        <div class="blur-3 w-full h-full max-w-sm max-h-40 absolute bg-black opacity-10 rounded-xl"></div>
 
         <div class="bg-white h-full w-full max-w-sm max-h-40 rounded-lg shadow-2xl px-12">
             <!-- title -->

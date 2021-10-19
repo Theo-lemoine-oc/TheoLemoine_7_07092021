@@ -1,6 +1,6 @@
 <template>
     <div>
-        <font-awesome-icon :icon="['fas', icon]" class="icon"/>
+        <font-awesome-icon :icon="['fas', icon]" class="icon" />
     </div>
 </template>
 
@@ -25,6 +25,5 @@
 
     .icon {
         position: absolute;
-        font-size: 1rem;
     }
 </style>
