@@ -1,9 +1,32 @@
 <template>
-    <section class="bg-white shadow mt-8 p-4 rounded-lg">
-        <nuxt-link to="/">
-            <div class="bg-gray-200 rounded-full py-2 px-4 text-lg">
-                <span class="text-gray-500">Quoi de neuf, Théo ?</span>
-            </div>
-        </nuxt-link>
+    <section class="bg-white shadow-md my-8 rounded-xl overflow-hidden">
+        <!-- post author -->
+        <PostAuthor />
+
+        <!-- post content -->
+        <PostContent />
+
+        <!-- post reaction -->
+        <PostReaction />
+
+        <!-- post comments -->
+        <PostComments />
+        <PostComments />
     </section>
 </template>
+
+<script>
+    import PostAuthor from '~/components/main/PostAuthor.vue';
+    import PostContent from '~/components/main/PostContent.vue';
+    import PostReaction from '~/components/main/PostReaction.vue';
+    import PostComments from '~/components/main/PostComments.vue';
+
+    export default {
+        components: {
+            PostAuthor,
+            PostContent,
+            PostReaction,
+            PostComments
+        }
+    }
+</script>
