@@ -11,7 +11,7 @@
                         </div>
 
                         <!-- logo -->
-                        <div class="w-1/5">
+                        <div class="w-1/5 flex justify-center">
                             <Logo />
                         </div>
 
