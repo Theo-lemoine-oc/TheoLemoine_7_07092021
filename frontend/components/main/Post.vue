@@ -12,6 +12,9 @@
         <!-- post comments -->
         <PostComments />
         <PostComments />
+
+        <!-- add a comment -->
+        <AddComment />
     </section>
 </template>
 
@@ -20,13 +23,15 @@
     import PostContent from '~/components/main/PostContent.vue';
     import PostReaction from '~/components/main/PostReaction.vue';
     import PostComments from '~/components/main/PostComments.vue';
+    import AddComment from '~/components/main/AddComment.vue';
 
     export default {
         components: {
             PostAuthor,
             PostContent,
             PostReaction,
-            PostComments
+            PostComments,
+            AddComment
         }
     }
 </script>
