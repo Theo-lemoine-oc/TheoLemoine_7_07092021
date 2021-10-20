@@ -14,9 +14,6 @@ const likesRoutes = require('./routes/likes');
 //Utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données grâce à une variable d'environnement
 require('dotenv').config();
 
-//Connexion à la base de données
-require("./Database");
-
 //Création de l'application Express
 const app = express();
 
