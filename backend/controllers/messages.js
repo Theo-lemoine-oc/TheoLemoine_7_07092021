@@ -6,6 +6,9 @@ const TITLE_LIMIT = 2;
 const CONTENT_LIMIT = 4;
 
 exports.createMessage = (req, res, next) => {
+
+    console.log("req :", req);
+    console.log("req body :", req.body);
     //getting auth header
     var headerAuth = req.headers['authorization'];
     var userId = jwtUtils.getUserId(headerAuth);
