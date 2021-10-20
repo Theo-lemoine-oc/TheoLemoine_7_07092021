@@ -91,9 +91,6 @@ exports.login = (req, res, next) => {
     var email = req.body.email;
     var password = req.body.password;
 
-    console.log("req :", req);
-    console.log("req body :", req.body);
-
     if (email == null || password == null) {
         return res.status(400).json({ 'error': 'missing parameters' });
     }
