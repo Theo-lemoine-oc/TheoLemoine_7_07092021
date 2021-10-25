@@ -1,6 +1,19 @@
 <template>
     <div>
-        <p class="px-4 pb-2">Je vous partage mes belles vacances, une vue sublime et un très bon temps, c'était top ! Rien de mieux que de se ressourcer pour repartir sur de beaux projets</p>
-        <img src="~/assets/img/paysage.jpeg" alt="Contenu de la publication">
+        <h3 class="px-4 mb-2 font-bold">{{ title }}</h3>
+        <p class="px-4 pb-2">{{ content }}</p>
+        <div v-if="attachment">
+            <img :src="require(`${attachment}`)" alt="Contenu de la publication">
+        </div>
     </div>
 </template>
+
+<script>
+export default {
+    props: {
+        title: String,
+        content: String,
+        attachment: String
+    }
+}
+</script>

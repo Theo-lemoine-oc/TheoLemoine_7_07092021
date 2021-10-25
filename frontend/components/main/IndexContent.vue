@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-2xl w-full">
         <CreatePost />
-        <Post />
+        <Post v-for="message in messages" v-bind:key="message.id" :title="message.title" :content="message.content" :attachment="message.attachment" />
     </div>
 </template>
 
@@ -13,6 +13,21 @@
         components: {
             CreatePost,
             Post
+        },
+        data() {
+            return {
+                messages: ""
+            }
+        },
+        methods: {
+            getMessages() {
+                this.$axios.$get("/message").then((res) => {
+                    this.messages = res;
+                })
+            }
+        },
+        created () {
+            this.getMessages();
         }
     }
 </script>

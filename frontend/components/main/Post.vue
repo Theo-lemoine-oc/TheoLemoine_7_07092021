@@ -4,13 +4,12 @@
         <PostAuthor />
 
         <!-- post content -->
-        <PostContent />
+        <PostContent :title="title" :content="content" :attachment="attachment" />
 
         <!-- post reaction -->
         <PostReaction />
 
         <!-- post comments -->
-        <PostComments />
         <PostComments />
 
         <!-- add a comment -->
@@ -32,6 +31,11 @@
             PostReaction,
             PostComments,
             AddComment
+        },
+        props: {
+            title: String,
+            content: String,
+            attachment: String
         }
     }
 </script>

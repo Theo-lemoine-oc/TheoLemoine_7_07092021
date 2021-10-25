@@ -39,6 +39,7 @@ exports.createMessage = (req, res, next) => {
                 models.Message.create({
                         title: title,
                         content: content,
+                        attachment: attachment,
                         likes: 0,
                         UserId: userFound.id
                     })

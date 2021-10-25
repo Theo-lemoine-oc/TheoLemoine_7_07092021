@@ -62,7 +62,7 @@ exports.signup = (req, res, next) => {
             var newUser = models.User.create({
                     email: email,
                     firstName: firstName,
-                    lastName: firstName,
+                    lastName: lastName,
                     password: bcryptedPassword,
                     bio: bio,
                     isAdmin: 0

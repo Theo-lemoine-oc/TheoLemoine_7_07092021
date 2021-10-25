@@ -14,6 +14,16 @@
 
         components: {
             Registration
+        },
+        methods: {
+            signup() {
+                this.$axios.$post("/auth/signup").then((res) => {
+                    
+                })
+            }
+        },
+        created () {
+            this.signup();
         }
     }
 </script>
