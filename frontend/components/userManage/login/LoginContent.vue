@@ -31,7 +31,7 @@ export default {
     components: {
         IconUser,
         IconKey
-    },
+    }/*,
     data() {
         return {
             email: '',
@@ -54,7 +54,7 @@ export default {
     },
     created () {
         this.userLogin();
-    }
+    }*/
 }
 </script>
 
