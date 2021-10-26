@@ -41,6 +41,6 @@
 
 <style scoped>
     nav {
-        background: linear-gradient(210deg, rgba(234,23,229,1) 10%, rgba(1,244,254,1) 100%);
+        background: linear-gradient(209deg, rgba(234,23,23,1) 10%, rgba(116,0,0,1) 100%);
     } 
 </style>

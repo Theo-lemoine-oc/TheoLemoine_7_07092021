@@ -68,7 +68,7 @@ export default {
     }
 
     .submit {
-        background: linear-gradient(90deg, rgba(1,244,254,1) 0%, rgba(234,23,229,1) 100%);
+        background: linear-gradient(209deg, rgba(234,23,23,1) 10%, rgba(116,0,0,1) 100%);
         transition: all .3s ease-in-out;
     }
     .submit:hover {
