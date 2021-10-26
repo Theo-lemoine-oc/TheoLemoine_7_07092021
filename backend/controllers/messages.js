@@ -1,87 +1,141 @@
 const models = require('../models');
-const asyncLib = require('async');
 const jwtUtils = require('../utils/jwt.utils');
+const fs = require("fs");
 
-const TITLE_LIMIT = 2;
-const CONTENT_LIMIT = 4;
 
+//create message
 exports.createMessage = (req, res, next) => {
-    //getting auth header
-    var headerAuth = req.headers['authorization'];
-    var userId = jwtUtils.getUserId(headerAuth);
+    //image url declaration
+    let attachmentURL;
 
-    //params
-    var title = req.body.title;
-    var content = req.body.content;
-
-    if (title == null || content == null) {
-        return res.status(400).json({ 'error': 'missing parameters' });
-    }
-
-    if (title.length <= TITLE_LIMIT || content.length <= CONTENT_LIMIT) {
-        return res.status(400).json({ 'error': 'invalid parameters' });
-    }
-
-    asyncLib.waterfall([
-        function(done) {
-            models.User.findOne({
-                    where: { id: userId }
-                })
-                .then(function(userFound) {
-                    done(null, userFound);
-                })
-                .catch(function(err) {
-                    return res.status(500).json({ 'error': 'unable to verify user' });
-                });
-        },
-        function(userFound, done) {
-            if (userFound) {
-                models.Message.create({
-                        title: title,
-                        content: content,
-                        attachment: attachment,
-                        likes: 0,
-                        UserId: userFound.id
-                    })
-                    .then(function(newMessage) {
-                        done(newMessage);
-                    });
+    //identify who created the message
+    let id = jwtUtils.getUserId(req.headers.authorization);
+    models.User.findOne({
+            attributes: ['id', 'email', 'firstName', 'lastName'],
+            where: { id: id }
+        })
+        .then(user => {
+            if (user !== null) {
+                //post recovery
+                let content = req.body.content;
+                if (req.file != undefined) {
+                    attachmentURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+                } else {
+                    attachmentURL == null
+                };
+                if ((content == 'null' && attachmentURL == null)) {
+                    res.status(400).json({ error: 'message content is empty' })
+                } else {
+                    models.Post.create({
+                            content: content,
+                            attachment: attachmentURL,
+                            UserId: user.id
+                        })
+                        .then((newPost) => {
+                            res.status(201).json(newPost);
+                        })
+                        .catch((err) => {
+                            res.status(500).json(err);
+                        })
+                };
             } else {
-                res.status(404).json({ 'error': 'user not found' });
+                res.status(400).json(error);
             }
-        },
-    ], function(newMessage) {
-        if (newMessage) {
-            return res.status(201).json(newMessage);
-        } else {
-            return res.status(500).json({ 'error': 'cannot post message' });
-        }
-    });
+        })
+        .catch(error => res.status(500).json(error));
 }
 
+//list messages
 exports.listMessages = (req, res, next) => {
-    var fields = req.query.fields;
-    var limit = parseInt(req.query.limit);
-    var offset = parseInt(req.query.offset);
-    var order = req.query.order;
+    models.Post.findAll({
+            include: [{
+                model: models.User,
+                attributes: ['firstName', 'lastName']
+            }],
+            //sort messages from newest to oldest
+            order: [
+                ['createdAt', 'ASC']
+            ]
+        })
+        .then(posts => {
+            if (posts.length > null) {
+                res.status(200).json(posts)
+            } else {
+                res.status(404).json({ error: 'no post to display' })
+            }
+        })
+        .catch(err => res.status(500).json(err))
+}
 
-    models.Message.findAll({
-        order: [(order != null) ? order.split(':') : ['title', 'ASC']],
-        attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
-        limit: (!isNaN(limit)) ? limit : null,
-        offset: (!isNaN(offset)) ? offset : null,
-        include: [{
-            model: models.User,
-            attributes: ['firstName', 'lastName']
-        }]
-    }).then(function(messages) {
-        if (messages) {
-            res.status(200).json(messages);
-        } else {
-            res.status(404).json({ 'error': 'no messages found' });
-        }
-    }).catch(function(err) {
-        console.log(err);
-        res.status(500).json({ 'error': 'invalid fields' });
-    })
+//deleting a post
+exports.deleteMessage = (req, res) => {
+    let userOrder = req.body.userIdOrder;
+
+    //user identification
+    let id = jwtUtils.getUserId(req.headers.authorization)
+    models.User.findOne({
+            attributes: ['id', 'email', 'firstName', 'lastName', 'isAdmin'],
+            where: { id: id }
+        })
+        .then(user => {
+            //checking that the user is either the admin or the message owner
+            if (user && (user.isAdmin == true || user.id == userOrder)) {
+                models.Post
+                    .findOne({
+                        where: { id: req.body.postId }
+                    })
+                    .then((postFind) => {
+
+                        if (postFind.attachment) {
+                            const filename = postFind.attachment.split('/images/')[1];
+                            fs.unlink(`images/${filename}`, () => {
+                                models.Post
+                                    .destroy({
+                                        where: { id: postFind.id }
+                                    })
+                                    .then(() => res.end())
+                                    .catch(err => res.status(500).json(err))
+                            })
+                        } else {
+                            models.Post
+                                .destroy({
+                                    where: { id: postFind.id }
+                                })
+                                .then(() => res.end())
+                                .catch(err => res.status(500).json(err))
+                        }
+                    })
+                    .catch(err => res.status(500).json(err))
+            } else { res.status(403).json('not authorized to delete this post') }
+        })
+        .catch(error => res.status(500).json(error));
+};
+
+
+//message modification
+exports.updateMessage = (req, res) => {
+    //retrieving user id for verification
+    let userOrder = req.body.userIdOrder;
+
+    //user identification
+    let id = jwtUtils.getUserId(req.headers.authorization);
+    models.User.findOne({
+            attributes: ['id', 'email', 'firstName', 'lastName', 'isAdmin'],
+            where: { id: id }
+        })
+        .then(user => {
+            //checking that the user is either the admin or the message owner
+            if (user && (user.isAdmin == true || user.id == userOrder)) {
+                models.Post
+                    .update({
+                        content: req.body.newText,
+                        attachment: req.body.newImg
+                    }, { where: { id: req.body.postId } })
+                    .then(() => res.end())
+                    .catch(err => res.status(500).json(err))
+            } else {
+                res.status(401).json({ error: 'not authorized to edit this post' })
+            }
+        })
+        .catch(error => res.status(500).json(error));
 }
