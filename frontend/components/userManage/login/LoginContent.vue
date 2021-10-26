@@ -17,7 +17,7 @@
                     </div>
 
                     <div class="text-center mt-4 text-white">
-                        <button @click="userLogin()" class="submit uppercase font-bold tracking-wider w-full h-full py-2 rounded-full">Connexion</button>
+                        <button @click.prevent="userLogin" type="submit" class="submit uppercase font-bold tracking-wider w-full h-full py-2 rounded-full">Connexion</button>
                     </div>
                 </form>
             </div>
@@ -27,34 +27,44 @@
 import IconUser from '~/components/utils/icons/IconUser.vue';
 import IconKey from '~/components/utils/icons/IconKey.vue';
 
+import { mapState } from 'vuex';
+
 export default {
     components: {
         IconUser,
         IconKey
-    }/*,
+    },
     data() {
         return {
-            email: '',
-            password: ''
-        }
+            email: null,
+            password: null
+        };
+    },
+    computed: {
+        ...mapState(['user'])    
     },
     methods: {
         userLogin() {
-            this.$axios.post('/auth/login', {
-            email: this.email,
-            password: this.password 
-            })
-            .then(function (response) {
-                window.location = '/';
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+            if(this.email !== null || this.password !== null) {
+                this.$axios.post('/auth/login', {
+                email: this.email,
+                password: this.password 
+                })
+                .then(function (response) {
+                    localStorage.setItem('token', response.data.token)
+                    location.replace(location.origin)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            } else {
+                console.log('missing parameters')
+            }
         }
     },
     created () {
         this.userLogin();
-    }*/
+    }
 }
 </script>
 
