@@ -4,7 +4,7 @@
         <PostAuthor />
 
         <!-- post content -->
-        <PostContent :title="title" :content="content" :attachment="attachment" />
+        <PostContent :content="content" :attachment="attachment" />
 
         <!-- post reaction -->
         <PostReaction />
@@ -33,7 +33,6 @@
             AddComment
         },
         props: {
-            title: String,
             content: String,
             attachment: String
         }

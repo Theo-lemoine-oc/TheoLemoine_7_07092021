@@ -26,7 +26,7 @@ exports.createMessage = (req, res, next) => {
                 if ((content == 'null' && attachmentURL == null)) {
                     res.status(400).json({ error: 'message content is empty' })
                 } else {
-                    models.Post.create({
+                    models.Message.create({
                             content: content,
                             attachment: attachmentURL,
                             UserId: user.id
@@ -42,7 +42,10 @@ exports.createMessage = (req, res, next) => {
                 res.status(400).json(error);
             }
         })
-        .catch(error => res.status(500).json(error));
+        .catch(error => {
+            console.log(error)
+            return res.status(500).json(error)
+        });
 }
 
 //list messages
@@ -58,11 +61,7 @@ exports.listMessages = (req, res, next) => {
             ]
         })
         .then(posts => {
-            if (posts.length > null) {
-                res.status(200).json(posts)
-            } else {
-                res.status(404).json({ error: 'no post to display' })
-            }
+            res.status(200).json(posts);
         })
         .catch(err => res.status(500).json(err))
 }
@@ -134,7 +133,7 @@ exports.updateMessage = (req, res) => {
                     .then(() => res.end())
                     .catch(err => res.status(500).json(err))
             } else {
-                res.status(401).json({ error: 'not authorized to edit this post' })
+                res.status(403).json({ error: 'not authorized to edit this post' })
             }
         })
         .catch(error => res.status(500).json(error));

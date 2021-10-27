@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 
+require('dotenv').config();
+
 //Vérification du Token de l'utilisateur pour voir s'il correspond à l'id du user
 
 module.exports = (req, res, next) => {
@@ -15,7 +17,8 @@ module.exports = (req, res, next) => {
         } else {
             next();
         }
-    } catch {
+    } catch (e) {
+        console.log(e);
         res.status(401).json({
             error: new Error('Invalid request!')
         });

@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-2xl w-full">
         <CreatePost />
-        <Post v-for="message in messages" v-bind:key="message.id" :title="message.title" :content="message.content" :attachment="message.attachment" />
+        <Post v-for="message in messages" v-bind:key="message.id" :content="message.content" :attachment="message.attachment" />
     </div>
 </template>
 

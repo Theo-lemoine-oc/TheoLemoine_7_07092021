@@ -14,8 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     };
     Message.init({
         content: DataTypes.STRING,
-        attachment: DataTypes.STRING,
-        likes: DataTypes.INTEGER
+        attachment: DataTypes.STRING
     }, {
         sequelize,
         modelName: 'Message',

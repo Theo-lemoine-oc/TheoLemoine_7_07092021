@@ -66,14 +66,12 @@ export default {
             if ((this.email !== null || this.firstName !== null || this.lastName !== null || this.password !== null) && (EMAIL_REGEX.test(this.email) && PASSWORD_REGEX.test(this.password))) {
                 this.$axios.post('/auth/signup', {
                 email: this.email,
+                firstName: this.firstName,
+                lastName: this.lastName,
                 password: this.password 
                 })
                 .then(function (response) {
-                    //reset
-                    this.email = null;
-                    this.firstName = null;
-                    this.lastName = null;
-                    this.password = null;
+                    location.replace("/login");
                 })
                 .catch(function (error) {
                     console.log(error);
