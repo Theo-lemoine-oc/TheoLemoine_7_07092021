@@ -4,7 +4,7 @@
             <img src="~/assets/img/profil.jpg" alt="Photo de profil de l'utilisateur" class="w-10 rounded-full border border-black">
             <div class="ml-4">
                 <h2 class="text-base font-bold"><nuxt-link to="" class="hover:underline">{{ author }}</nuxt-link></h2>
-                <span class="text-xs">20 octobre 2021, 00:16</span>
+                <span class="text-xs">{{createdAt.slice(0, 10)}}</span>
             </div>
         </div>
         <div class="relative">
@@ -32,7 +32,8 @@ export default {
     },
     props: {
         firstName: String,
-        lastName: String
+        lastName: String,
+        createdAt: String
     }
 }
 </script>
