@@ -1,5 +1,5 @@
 <template>
-    <Icon icon="times" class="text-gray-300 hover:text-black duration-500 ease-in-out" />
+    <Icon icon="times" class="cursor-pointer text-black hover:text-gray-300 duration-300 ease-in-out" />
 </template>
 
 <script>

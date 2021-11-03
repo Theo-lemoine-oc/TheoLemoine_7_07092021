@@ -2,13 +2,16 @@
     <div class="w-full h-full bg-black bg-opacity-30 absolute top-0 left-0 flex justify-center items-center z-10">
         <div class="create-message bg-white rounded-2xl shadow-lg p-4">
             <div class="w-full h-1/2">
-                <h3 class="font-bold mb-4 text-lg">Quoi de neuf, Théo ?</h3>
+                <div class="flex justify-between">
+                    <h3 class="font-bold mb-4 text-lg">Quoi de neuf, {{ firstName }} ?</h3>
+                    <IconCross />
+                </div>
                 <textarea placeholder="Écrivez votre message" class="text-sm bg-gray-200 rounded-3xl w-full h-full px-6 py-2 outline-none resize-none"></textarea>
-                <button class="w-full text-center text-red-500">
-                    Ajouter une image
+                <button class="w-full text-red-500 flex items-center">
+                    <IconImage /> Ajouter une image
                 </button>
                 <div class="text-center mt-4 text-white">
-                    <button type="submit" class="submit uppercase font-bold tracking-wider h-full py-2 px-8 rounded-full">Envoyer</button>
+                    <button @click.prevent="createMessage" type="submit" class="submit uppercase font-bold tracking-wider h-full py-2 px-8 rounded-full">Envoyer</button>
                 </div>
             </div>
         </div>
@@ -20,8 +23,39 @@ import IconCross from '~/components/utils/icons/IconCross.vue';
 import IconImage from '~/components/utils/icons/IconImage.vue';
 
 export default {
-    IconCross,
-    IconImage
+    components: {
+        IconCross,
+        IconImage
+    },
+    props: {
+        firstName: String,
+        lastName: String,
+    },
+    data() {
+        return {
+            contentMessage: {
+                content: "",
+                attachment: ""
+            },
+            msgError: ""
+        };
+    },
+    methods: {
+        createMessage() {
+            const fd = new FormData();
+            fd.append("content", this.contentMessage.content);
+            const connection = this.$axios.create({ headers: { Authorization: "Bearer " + localStorage.getItem("token") } })
+            connection.$post("/message").then(response => {
+                if(response) {
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                this.msgError = error;
+            })
+        }
+    }
+
 }
 </script>
 
