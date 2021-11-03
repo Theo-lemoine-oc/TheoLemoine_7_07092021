@@ -1,6 +1,6 @@
 <template>
     <div class="max-w-2xl w-full">
-        <CreatePost />
+        <CreatePost v-bind:key="user.id" :firstName="user.firstName" :lastName="user.lastName" />
         <Post v-for="message in messages" v-bind:key="message.id" :content="message.content" :attachment="message.attachment" :createdAt="message.createdAt" :firstName="getInfos('firstName', message)" :lastName="getInfos('lastName', message)"/>
     </div>
 </template>
@@ -21,7 +21,12 @@
                     content: "",
                     attachment: "",
                 },
-                messages: []
+                messages: [],
+                user: {
+                    id: "",
+                    firstName: "",
+                    lastName: ""
+                }
             };
         },
         methods: {
@@ -39,6 +44,12 @@
             const connection = this.$axios.create({ headers: { Authorization: "Bearer " + localStorage.getItem("token") } })
             connection.$get("/message").then((res) => {
             this.messages = res
+            })
+            .catch(error => {
+                console.log(error)
+            }),
+            connection.$get("/auth/me").then((res) => {
+            this.user = res
             })
             .catch(error => {
                 console.log(error)
