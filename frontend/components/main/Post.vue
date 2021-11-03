@@ -1,7 +1,7 @@
 <template>
     <section class="bg-white shadow-md my-8 rounded-xl overflow-hidden">
         <!-- post author -->
-        <PostAuthor />
+        <PostAuthor :firstName="firstName" :lastName="lastName" />
 
         <!-- post content -->
         <PostContent :content="content" :attachment="attachment" />
@@ -34,7 +34,9 @@
         },
         props: {
             content: String,
-            attachment: String
+            attachment: String,
+            firstName: String,
+            lastName: String
         }
     }
 </script>

@@ -63,6 +63,7 @@ export default {
             const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/;
 
+
             if ((this.email !== null || this.firstName !== null || this.lastName !== null || this.password !== null) && (EMAIL_REGEX.test(this.email) && PASSWORD_REGEX.test(this.password))) {
                 this.$axios.post('/auth/signup', {
                 email: this.email,

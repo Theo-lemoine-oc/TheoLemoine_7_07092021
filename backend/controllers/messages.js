@@ -16,7 +16,7 @@ exports.createMessage = (req, res, next) => {
         })
         .then(user => {
             if (user !== null) {
-                //post recovery
+                //message recovery
                 let content = req.body.content;
                 if (req.file != undefined) {
                     attachmentURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
@@ -31,8 +31,8 @@ exports.createMessage = (req, res, next) => {
                             attachment: attachmentURL,
                             UserId: user.id
                         })
-                        .then((newPost) => {
-                            res.status(201).json(newPost);
+                        .then((newMessage) => {
+                            res.status(201).json(newMessage);
                         })
                         .catch((err) => {
                             res.status(500).json(err);
@@ -50,23 +50,23 @@ exports.createMessage = (req, res, next) => {
 
 //list messages
 exports.listMessages = (req, res, next) => {
-    models.Post.findAll({
+    models.Message.findAll({
             include: [{
                 model: models.User,
                 attributes: ['firstName', 'lastName']
             }],
             //sort messages from newest to oldest
             order: [
-                ['createdAt', 'ASC']
+                ['createdAt', 'DESC']
             ]
         })
-        .then(posts => {
-            res.status(200).json(posts);
+        .then(messages => {
+            res.status(200).json(messages);
         })
         .catch(err => res.status(500).json(err))
 }
 
-//deleting a post
+//deleting a message
 exports.deleteMessage = (req, res) => {
     let userOrder = req.body.userIdOrder;
 
@@ -79,33 +79,33 @@ exports.deleteMessage = (req, res) => {
         .then(user => {
             //checking that the user is either the admin or the message owner
             if (user && (user.isAdmin == true || user.id == userOrder)) {
-                models.Post
+                models.Message
                     .findOne({
-                        where: { id: req.body.postId }
+                        where: { id: req.body.messageId }
                     })
-                    .then((postFind) => {
+                    .then((messageFind) => {
 
-                        if (postFind.attachment) {
-                            const filename = postFind.attachment.split('/images/')[1];
+                        if (messagetFind.attachment) {
+                            const filename = messageFind.attachment.split('/images/')[1];
                             fs.unlink(`images/${filename}`, () => {
-                                models.Post
+                                models.Message
                                     .destroy({
-                                        where: { id: postFind.id }
+                                        where: { id: messageFind.id }
                                     })
                                     .then(() => res.end())
                                     .catch(err => res.status(500).json(err))
                             })
                         } else {
-                            models.Post
+                            models.Message
                                 .destroy({
-                                    where: { id: postFind.id }
+                                    where: { id: messageFind.id }
                                 })
                                 .then(() => res.end())
                                 .catch(err => res.status(500).json(err))
                         }
                     })
                     .catch(err => res.status(500).json(err))
-            } else { res.status(403).json('not authorized to delete this post') }
+            } else { res.status(403).json('not authorized to delete this message') }
         })
         .catch(error => res.status(500).json(error));
 };
@@ -125,15 +125,15 @@ exports.updateMessage = (req, res) => {
         .then(user => {
             //checking that the user is either the admin or the message owner
             if (user && (user.isAdmin == true || user.id == userOrder)) {
-                models.Post
+                models.Message
                     .update({
                         content: req.body.newText,
                         attachment: req.body.newImg
-                    }, { where: { id: req.body.postId } })
+                    }, { where: { id: req.body.messageId } })
                     .then(() => res.end())
                     .catch(err => res.status(500).json(err))
             } else {
-                res.status(403).json({ error: 'not authorized to edit this post' })
+                res.status(403).json({ error: 'not authorized to edit this message' })
             }
         })
         .catch(error => res.status(500).json(error));
