@@ -14,6 +14,9 @@
 
             <!-- bottom card -->
             <RegisterBottom />
+
+            <!-- signup success popup -->
+            <SignupSuccessful />
         </div>
     </section>
 </template>
@@ -22,12 +25,14 @@
 import RegisterTitle from '~/components/userManage/registration/RegisterTitle.vue';
 import RegisterContent from '~/components/userManage/registration/RegisterContent.vue';
 import RegisterBottom from '~/components/userManage/registration/RegisterBottom.vue';
+import SignupSuccessful from '~/components/modales/SignupSuccessful.vue';
 
 export default {
     components: {
         RegisterTitle,
         RegisterContent,
         RegisterBottom,
+        SignupSuccessful
     }
 }
 </script>

@@ -41,7 +41,7 @@ export default {
         };
     },
     computed: {
-        ...mapState(['user'])    
+        ...mapState(['user'])
     },
     methods: {
         userLogin() {
