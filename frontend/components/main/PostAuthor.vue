@@ -8,10 +8,10 @@
             </div>
         </div>
         <div class="relative">
-            <button id="editMessage" class="w-full flex justify-end">
+            <button v-on:click="editMessage" class="w-full flex justify-end">
                 <IconDots />
             </button>
-            <EditMessage class="absolute -left-44 hidden" />
+            <EditMessage id="editMessage" class="absolute -left-44 hidden" :message="message" />
         </div>
     </div>
 </template>
@@ -34,6 +34,16 @@ export default {
         firstName: String,
         lastName: String,
         createdAt: String
+    },
+    methods: {
+        editMessage() {
+            const editMessage = document.getElementById('editMessage');
+            if(editMessage.classList.contains('hidden')) {
+                editMessage.classList.remove('hidden');
+            } else {
+                editMessage.classList.add('hidden');
+            }
+        }
     }
 }
 </script>
