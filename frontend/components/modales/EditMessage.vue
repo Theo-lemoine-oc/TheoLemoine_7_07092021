@@ -18,7 +18,7 @@
 import IconFlag from '~/components/utils/icons/IconFlag.vue';
 import IconEdit from '~/components/utils/icons/IconEdit.vue';
 import IconTrash from '~/components/utils/icons/IconTrash.vue';
-
+ 
 export default {
     components: {
         IconFlag,
