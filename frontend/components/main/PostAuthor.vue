@@ -11,7 +11,7 @@
             <button id="editMessage" class="w-full flex justify-end">
                 <IconDots />
             </button>
-            <EditMessage class="absolute -left-44 hidden" />
+            <EditMessage class="absolute -left-44" :message="message" />
         </div>
     </div>
 </template>
