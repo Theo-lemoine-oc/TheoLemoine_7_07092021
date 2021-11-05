@@ -36,7 +36,7 @@ app.use(helmet());
 app.use(nocache());
 
 //Images
-app.use("./images", express.static(path.join(__dirname, "images")));
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 //Ajouter notre limite de requêtes par @IP
 app.use('/api', limiter);
