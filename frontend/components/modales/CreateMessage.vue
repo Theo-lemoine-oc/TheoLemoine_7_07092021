@@ -7,11 +7,11 @@
                     <IconCross />
                 </div>
                 <textarea v-model="contentMessage.content" placeholder="Écrivez votre message" class="text-sm bg-gray-200 rounded-3xl w-full h-full px-6 py-2 outline-none resize-none"></textarea>
-                <button class="w-full text-red-500 flex items-center">
-                    <IconImage /> Ajouter une image
-                </button>
+                <span v-on:click="uploadImage" class="fit-content flex items-center text-red-500 hover:text-red-600 cursor-pointer"><IconImage /> Ajouter une image</span>
+                <input type="file" name="inputImage" @change="onFileChange" accept=".png,.jpg,.jpeg" id="inputImage" class="w-full text-red-500 flex items-center hidden" />
                 <div class="text-center mt-4 text-white">
                     <button @click.prevent="createMessage" type="submit" class="submit uppercase font-bold tracking-wider h-full py-2 px-8 rounded-full">Poster le message</button>
+                    <span id="feedBackMsg">{{ msgError }}</span>
                 </div>
             </div>
         </div>
@@ -43,8 +43,11 @@ export default {
     methods: {
         createMessage() {
             const fd = new FormData();
-            fd.append("content", this.contentMessage.content);
-            if(fd.get("content") == "null") {
+            fd.append('content', this.contentMessage.content);
+            fd.append('inputImage', this.contentMessage.attachment)
+            if(fd.get("content") == "null" && fd.get('inputImage' == "null")) {
+                let feedBackMsg = document.getElementById('feedBackMsg');
+                feedBackMsg.classList.add('text-red-500');
                 this.msgError = "Veuillez saisir un contenu à votre message";
             } else {
                 const connection = this.$axios.create({ headers: { Authorization: "Bearer " + localStorage.getItem("token") } })
@@ -57,9 +60,14 @@ export default {
                     this.msgError = error;
                 })
             }
-        }
+        },
+        onFileChange (e) {
+            this.contentMessage.attachment = e.target.files[0] || e.dataTransfer.files;
+        },
+        uploadImage() {
+            document.getElementById('inputImage').click();
+        },
     }
-
 }
 </script>
 
@@ -76,5 +84,9 @@ export default {
     }
     .submit:hover {
         filter: brightness(90%);
+    }
+
+    .fit-content {
+        width: fit-content;
     }
 </style>
