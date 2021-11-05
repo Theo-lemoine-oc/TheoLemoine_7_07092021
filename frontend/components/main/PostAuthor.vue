@@ -37,7 +37,9 @@ export default {
     },
     methods: {
         editMessage() {
+            console.warn("toto")
             const editMessage = document.getElementById('editMessage');
+                        console.warn(editMessage)
             if(editMessage.classList.contains('hidden')) {
                 editMessage.classList.remove('hidden');
             } else {

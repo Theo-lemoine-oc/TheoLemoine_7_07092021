@@ -10,7 +10,7 @@
         <PostReaction />
 
         <!-- post comments -->
-        <PostComments />
+        
 
         <!-- add a comment -->
         <AddComment />
