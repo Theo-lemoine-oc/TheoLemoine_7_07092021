@@ -68,8 +68,6 @@ exports.listMessages = (req, res, next) => {
 
 //deleting a message
 exports.deleteMessage = (req, res) => {
-    let userOrder = req.body.userIdOrder;
-
     //user identification
     let id = jwtUtils.getUserId(req.headers.authorization)
     models.User.findOne({
@@ -78,34 +76,46 @@ exports.deleteMessage = (req, res) => {
         })
         .then(user => {
             //checking that the user is either the admin or the message owner
-            if (user && (user.isAdmin == true || user.id == userOrder)) {
-                models.Message
-                    .findOne({
-                        where: { id: req.body.messageId }
-                    })
-                    .then((messageFind) => {
-
-                        if (messagetFind.attachment) {
+            models.Message
+                .findOne({
+                    where: { id: req.params.id },
+                    include: models.User
+                })
+                .then((messageFind) => {
+                    console.log(user.isAdmin)
+                    console.log(user.id)
+                    console.log(messageFind.dataValues.UserId)
+                    if (user && (user.isAdmin == true || user.id == messageFind.dataValues.UserId)) {
+                        if (messageFind.attachment) {
                             const filename = messageFind.attachment.split('/images/')[1];
                             fs.unlink(`images/${filename}`, () => {
                                 models.Message
                                     .destroy({
-                                        where: { id: messageFind.id }
+                                        where: { id: messageFind.dataValues.id }
                                     })
-                                    .then(() => res.end())
+                                    .then(() => res.status(204).json({}))
                                     .catch(err => res.status(500).json(err))
                             })
                         } else {
+                            console.log("toto")
                             models.Message
                                 .destroy({
-                                    where: { id: messageFind.id }
+                                    where: { id: messageFind.dataValues.id }
                                 })
-                                .then(() => res.end())
-                                .catch(err => res.status(500).json(err))
+                                .then(() => res.status(204).json({}))
+                                .catch(
+                                    err => {
+                                        console.log(err)
+                                        return res.status(500).json(err)
+                                    }
+                                )
                         }
-                    })
-                    .catch(err => res.status(500).json(err))
-            } else { res.status(403).json('not authorized to delete this message') }
+                    } else { res.status(403).json({ error: 'not authorized to delete this message' }) }
+                })
+                .catch(err => {
+                    console.log(err)
+                    return res.status(500).json(err)
+                })
         })
         .catch(error => res.status(500).json(error));
 };

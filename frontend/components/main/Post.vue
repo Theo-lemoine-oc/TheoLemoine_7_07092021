@@ -1,7 +1,7 @@
 <template>
     <section class="bg-white shadow-md my-8 rounded-xl overflow-hidden">
         <!-- post author -->
-        <PostAuthor :firstName="firstName" :lastName="lastName" :createdAt="createdAt" />
+        <PostAuthor :messageId="messageId" :firstName="firstName" :lastName="lastName" :createdAt="createdAt" />
 
         <!-- post content -->
         <PostContent :content="content" :attachment="attachment" />
@@ -33,6 +33,7 @@
             AddComment
         },
         props: {
+            messageId: Number,
             content: String,
             attachment: String,
             firstName: String,
