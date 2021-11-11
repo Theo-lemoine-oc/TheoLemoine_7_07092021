@@ -45,7 +45,7 @@ export default {
             const fd = new FormData();
             fd.append('content', this.contentMessage.content);
             fd.append('inputImage', this.contentMessage.attachment)
-            if(fd.get("content") == "null" && fd.get('inputImage' == "null")) {
+            if(fd.get("content") == "null" && fd.get('inputImage') == "null") {
                 let feedBackMsg = document.getElementById('feedBackMsg');
                 feedBackMsg.classList.add('text-red-500');
                 this.msgError = "Veuillez saisir un contenu à votre message";
