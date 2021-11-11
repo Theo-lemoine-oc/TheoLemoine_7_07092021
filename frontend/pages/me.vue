@@ -20,9 +20,9 @@
                             <span class="font-bold">Adresse e-mail :</span> {{ user.email }}
                         </li>
                         <li class="flex justify-between items-center relative mb-4">
-                            <span class="font-bold">Mot de passe :</span> •••••••••• <button v-on:click="editPassword()" class="cursor-pointer absolute -right-10 text-red-500 hover:text-red-700 duration-300"><IconEdit /></button>
+                            <span class="font-bold">Mot de passe :</span> •••••••••• <button v-on:click="editPassword = true" class="cursor-pointer absolute -right-10 text-red-500 hover:text-red-700 duration-300"><IconEdit /></button>
                         </li>
-                        <EditPassword id="editPassword" v-bind:key="user.id" :password="user.password" class="hidden" />
+                        <EditPassword @close-password="closePassword" v-if="editPassword" v-bind:key="user.id" :password="user.password" />
                     </ul>
                     <button type="button" @click="deleteAccount" class="text-red-500 hover:underline cursor-pointer max-w-max">Supprimer mon compte</button>
                 </div>
@@ -32,52 +32,54 @@
 </template>
 
 <script>
-    import IconEdit from '~/components/utils/icons/IconEdit.vue';
-    import EditPassword from '~/components/modales/editPassword.vue';
+import IconEdit from '~/components/utils/icons/IconEdit.vue';
+import EditPassword from '~/components/modales/EditPassword.vue';
 
-    export default {
-        head: {
-            title: 'Groupomania | Mon profil'
-        },
-        components: {
-            IconEdit,
-            EditPassword,
-        },
-        data() {
-            return {
-                user: {
-                    id: "",
-                    firstName: "",
-                    lastName: "",
-                    email: "",
-                    password: ""
-                }
-            };
-        },
-        methods: {
-            deleteAccount() {
-              const connection = this.$axios.create({ headers: { Authorization: "Bearer " + localStorage.getItem("token") } })
-
-                connection.$get("/auth/me").then((res) => {
-                this.user = res
-                })
-                .catch(error => {
-                    console.log(error)
-                }),
-                connection.$delete("/auth/:id").then((res) => {
-                localStorage.clear();
-                location.replace(location.origin + "/#/signup");
-                })
-                .catch(error => {
-                    console.log(error)
-                })  
+export default {
+    head: {
+        title: 'Groupomania | Mon profil'
+    },
+    components: {
+        IconEdit,
+        EditPassword,
+    },
+    data() {
+        return {
+            user: {
+                id: "",
+                firstName: "",
+                lastName: "",
+                email: "",
+                password: ""
             },
-            editPassword() {
-                const editPassword = document.getElementById('editPassword');
-                editPassword.classList.remove('hidden');
-            }
+            editPassword: false
+        };
+    },
+    methods: {
+        deleteAccount() {
+            const connection = this.$axios.create({ headers: { Authorization: "Bearer " + localStorage.getItem("token") } })
+            connection.$delete(`/auth/${this.user.id}`).then((res) => {
+            localStorage.clear();
+            location.replace(location.origin + "/signup");
+            })
+            .catch(error => {
+                console.log(error)
+            })  
+        },
+        closePassword() {
+            this.editPassword = false;
         }
+    },
+    mounted() {
+        const connection = this.$axios.create({ headers: { Authorization: "Bearer " + localStorage.getItem("token") } });
+        connection.$get("/auth/me").then((res) => {
+        this.user = res
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
+}
 </script>
 
 <style scoped>

@@ -8,11 +8,11 @@
             </div>
         </div>
         <div class="relative">
-            <button v-on:click="editMessage" class="w-full flex justify-end">
+            <button class="w-full flex justify-end">
                 <IconDots />
             </button>
-            <EditMessage id="editMessage" class="absolute -left-44 hidden" :message="message" />
         </div>
+        <EditMessage :messageId="messageId" />
     </div>
 </template>
 
@@ -31,21 +31,13 @@ export default {
         }
     },
     props: {
+        messageId: Number,
         firstName: String,
         lastName: String,
         createdAt: String
     },
     methods: {
-        editMessage() {
-            console.warn("toto")
-            const editMessage = document.getElementById('editMessage');
-                        console.warn(editMessage)
-            if(editMessage.classList.contains('hidden')) {
-                editMessage.classList.remove('hidden');
-            } else {
-                editMessage.classList.add('hidden');
-            }
-        }
+
     }
 }
 </script>

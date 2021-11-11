@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-2xl w-full">
         <CreatePost v-bind:key="user.id" :firstName="user.firstName" :lastName="user.lastName" />
-        <Post v-for="message in messages" v-bind:key="message.id" :content="message.content" :attachment="message.attachment" :createdAt="message.createdAt" :firstName="getInfos('firstName', message)" :lastName="getInfos('lastName', message)"/>
+        <Post v-for="message in messages" v-bind:key="message.id" :messageId="message.id" :content="message.content" :attachment="message.attachment" :createdAt="message.createdAt" :firstName="getInfos('firstName', message)" :lastName="getInfos('lastName', message)"/>
     </div>
 </template>
 
@@ -25,7 +25,8 @@
                 user: {
                     id: "",
                     firstName: "",
-                    lastName: ""
+                    lastName: "",
+                    isAdmin: ""
                 }
             };
         },

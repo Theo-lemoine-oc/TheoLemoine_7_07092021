@@ -105,13 +105,12 @@ exports.changePassword = (req, res) => {
     console.log(newPassword)
 
     //if the new password is valid
-    if (verifInput.validPassword(newPassword)) {
+    if (PASSWORD_REGEX.test(newPassword)) {
         //check it is different from the old one
         models.User.findOne({
                 where: { id: userId }
             })
             .then(user => {
-                console.log('user trouvé', user)
                 bcrypt.compare(newPassword, user.password, (errComparePassword, resComparePassword) => {
                     //bcrypt returns resComparePassword if the passwords are identical
                     if (resComparePassword) {
@@ -136,7 +135,6 @@ exports.changePassword = (req, res) => {
 exports.deleteProfile = (req, res) => {
     //user id retrieval
     let userId = jwtUtils.getUserId(req.headers.authorization);
-
     if (userId != null) {
         //verify that the user exists
         models.User.findOne({
@@ -145,7 +143,7 @@ exports.deleteProfile = (req, res) => {
             .then(user => {
                 if (user != null) {
                     //delete all the user's posts
-                    models.Post
+                    models.Message
                         .destroy({
                             where: { userId: user.id }
                         })
