@@ -7,7 +7,10 @@
                 <img src="~/assets/img/profil.jpg" alt="Photo de profil de l'utilisateur" class="w-40 rounded-full border border-black">
             </div>
             <div class="w-1/2">
-                <h2 class="font-bold text-xl mb-8">Modifier votre profil</h2>
+                <h2 class="font-bold text-xl mb-8">
+                    Modifier votre profil
+                    <span v-if="user.isAdmin == true" class="block font-normal text-xs italic">Vous êtes Administrateur</span>
+                </h2>
                 <div class="flex flex-col justify-center">
                     <ul class="w-2/3">
                         <li class="flex justify-between items-center relative mb-4">
@@ -24,16 +27,18 @@
                         </li>
                         <EditPassword @close-password="closePassword" v-if="editPassword" v-bind:key="user.id" :password="user.password" />
                     </ul>
-                    <button type="button" @click="deleteAccount" class="text-red-500 hover:underline cursor-pointer max-w-max">Supprimer mon compte</button>
+                    <button type="button" v-on:click="openDeleteAccount = true" class="text-red-500 hover:underline cursor-pointer max-w-max">Supprimer mon compte</button>
                 </div>
             </div>
         </div>
+        <DeleteAccount @close-deleteAccount="closeDeleteAccount" v-if="openDeleteAccount" v-bind:key="user.id" :userId="user.id" :firstName="user.firstName" :lastName="user.lastName" :isAdmin="user.isAdmin" />
     </main>
 </template>
 
 <script>
 import IconEdit from '~/components/utils/icons/IconEdit.vue';
 import EditPassword from '~/components/modales/EditPassword.vue';
+import DeleteAccount from '~/components/modales/DeleteAccount.vue';
 
 export default {
     head: {
@@ -42,6 +47,7 @@ export default {
     components: {
         IconEdit,
         EditPassword,
+        DeleteAccount
     },
     data() {
         return {
@@ -50,24 +56,19 @@ export default {
                 firstName: "",
                 lastName: "",
                 email: "",
-                password: ""
+                password: "",
+                isAdmin: ""
             },
-            editPassword: false
+            editPassword: false,
+            openDeleteAccount: false
         };
     },
     methods: {
-        deleteAccount() {
-            const connection = this.$axios.create({ headers: { Authorization: "Bearer " + localStorage.getItem("token") } })
-            connection.$delete(`/auth/${this.user.id}`).then((res) => {
-            localStorage.clear();
-            location.replace(location.origin + "/signup");
-            })
-            .catch(error => {
-                console.log(error)
-            })  
-        },
         closePassword() {
             this.editPassword = false;
+        },
+        closeDeleteAccount() {
+            this.openDeleteAccount = false;
         }
     },
     mounted() {

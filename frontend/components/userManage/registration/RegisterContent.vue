@@ -28,6 +28,7 @@
             <div class="text-center mt-8 text-white">
                 <button @click.prevent="userSignup" type="submit" class="submit uppercase font-bold tracking-wider w-full h-full py-2 rounded-full">Inscription</button>
             </div>
+            <span class="text-red-500 flex text-center mt-4">{{ msgError }}</span>
         </form>
     </div>
 </template>
@@ -37,8 +38,6 @@ import IconUser from '~/components/utils/icons/IconUser.vue';
 import IconUserTag from '~/components/utils/icons/IconUserTag.vue';
 import IconEnvelope from '~/components/utils/icons/IconEnvelope.vue';
 import IconKey from '~/components/utils/icons/IconKey.vue';
-
-import { mapState } from 'vuex';
 
 export default {
     components: {
@@ -52,11 +51,9 @@ export default {
             email: null,
             firstName: null,
             lastName: null,
-            password: null
+            password: null,
+            msgError: ""
         };
-    },
-    computed: {
-        ...mapState(['user'])    
     },
     methods: {
         userSignup() {
@@ -71,19 +68,16 @@ export default {
                 lastName: this.lastName,
                 password: this.password 
                 })
-                .then(function (response) {
+                .then((response) => {
                     location.replace("/login");
                 })
-                .catch(function (error) {
+                .catch((error) => {
                     console.log(error);
                 });
             } else {
-                console.log('missing parameters')
+                this.msgError = "Veuillez vérifier que tous les champs ont étés saisis et soient correctes !"
             }
         }
-    },
-    created () {
-        this.userSignup();
     }
 }
 </script>

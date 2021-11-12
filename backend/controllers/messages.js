@@ -82,9 +82,6 @@ exports.deleteMessage = (req, res) => {
                     include: models.User
                 })
                 .then((messageFind) => {
-                    console.log(user.isAdmin)
-                    console.log(user.id)
-                    console.log(messageFind.dataValues.UserId)
                     if (user && (user.isAdmin == true || user.id == messageFind.dataValues.UserId)) {
                         if (messageFind.attachment) {
                             const filename = messageFind.attachment.split('/images/')[1];
@@ -97,7 +94,6 @@ exports.deleteMessage = (req, res) => {
                                     .catch(err => res.status(500).json(err))
                             })
                         } else {
-                            console.log("toto")
                             models.Message
                                 .destroy({
                                     where: { id: messageFind.dataValues.id }

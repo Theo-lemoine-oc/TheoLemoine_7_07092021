@@ -1,7 +1,7 @@
 <template>
     <main>
         <Navbar />
-        <div class="flex justify-center py-8 bg-gray-50">
+        <div class="min-screen-h h-full flex justify-center py-8 bg-gray-50">
             <IndexContent />
         </div>
     </main>
@@ -18,3 +18,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .min-screen-h {
+        min-height: 91vh;
+    }
+</style>

@@ -53,8 +53,9 @@ export default {
                     console.log(err);
                     this.feedBackAPI = "Vérifiez les informations que vous avez saisies";
                 });
+            } else {
+                this.feedBackAPI = "Les mots de passes ne correspondent pas !";
             }
-            this.feedBackAPI = "Les mots de passes ne correspondent pas !";
         },
         closeModale() {
             this.$emit('close-password');

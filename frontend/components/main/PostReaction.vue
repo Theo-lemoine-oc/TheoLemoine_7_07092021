@@ -4,7 +4,7 @@
             <IconHeart class="text-2xl cursor-pointer" />
             <IconShare class="text-2xl ml-2 cursor-pointer" />
         </div>
-        <span class="text-sm font-bold">42 j'aimes</span>
+        <span class="text-sm font-bold">0 j'aimes</span>
     </div>
 </template>
 

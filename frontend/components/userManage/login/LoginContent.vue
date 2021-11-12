@@ -19,6 +19,7 @@
                     <div class="text-center mt-4 text-white">
                         <button @click.prevent="userLogin" type="submit" class="submit uppercase font-bold tracking-wider w-full h-full py-2 rounded-full">Connexion</button>
                     </div>
+                    <span class="text-red-500 flex text-center mt-4">{{ msgError }}</span>
                 </form>
             </div>
 </template>
@@ -26,8 +27,6 @@
 <script>
 import IconUser from '~/components/utils/icons/IconUser.vue';
 import IconKey from '~/components/utils/icons/IconKey.vue';
-
-import { mapState } from 'vuex';
 
 export default {
     components: {
@@ -37,11 +36,9 @@ export default {
     data() {
         return {
             email: null,
-            password: null
+            password: null,
+            msgError: ""
         };
-    },
-    computed: {
-        ...mapState(['user'])
     },
     methods: {
         userLogin() {
@@ -50,20 +47,19 @@ export default {
                 email: this.email,
                 password: this.password 
                 })
-                .then(function (response) {
+                .then((response) => {
+                    console.log("test")
                     localStorage.setItem('token', response.data.token)
                     location.replace(location.origin)
                 })
-                .catch(function (error) {
+                .catch((error) => {
                     console.log(error);
+                    this.msgError = "Les informations que vous avez saisies sont invalides !"
                 });
             } else {
-                console.log('missing parameters')
+                this.msgError = "Veuillez vérifier que tous les champs ont étés saisis !"
             }
         }
-    },
-    created () {
-        this.userLogin();
     }
 }
 </script>

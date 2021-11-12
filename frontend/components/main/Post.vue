@@ -1,7 +1,7 @@
 <template>
     <section class="bg-white shadow-md my-8 rounded-xl overflow-hidden">
         <!-- post author -->
-        <PostAuthor :messageId="messageId" :firstName="firstName" :lastName="lastName" :createdAt="createdAt" />
+        <PostAuthor :messageId="messageId" :firstName="firstName" :lastName="lastName" :isAdmin="isAdmin" :createdAt="createdAt" />
 
         <!-- post content -->
         <PostContent :content="content" :attachment="attachment" />
@@ -38,6 +38,7 @@
             attachment: String,
             firstName: String,
             lastName: String,
+            isAdmin: Boolean,
             createdAt: String,
         }
     }
