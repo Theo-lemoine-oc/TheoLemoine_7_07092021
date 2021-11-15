@@ -11,7 +11,7 @@
                 <input type="file" name="inputImage" @change="onFileChange" accept=".png,.jpg,.jpeg" id="inputImage" class="w-full text-red-500 flex items-center hidden" />
                 <div class="text-center mt-4 text-white">
                     <button @click.prevent="createMessage" type="submit" class="submit uppercase font-bold tracking-wider h-full py-2 px-8 rounded-full">Poster le message</button>
-                    <span id="feedBackMsg">{{ msgError }}</span>
+                    <span id="feedBackMsg" class="text-red-500">{{ msgError }}</span>
                 </div>
             </div>
         </div>
@@ -44,10 +44,8 @@ export default {
         createMessage() {
             const fd = new FormData();
             fd.append('content', this.contentMessage.content);
-            fd.append('inputImage', this.contentMessage.attachment)
-            if(fd.get("content") == "null" && fd.get('inputImage') == "null") {
-                let feedBackMsg = document.getElementById('feedBackMsg');
-                feedBackMsg.classList.add('text-red-500');
+            fd.append('attachment', this.contentMessage.attachment)
+            if(fd.get("content") == "null" && fd.get('attachment') == "null") {
                 this.msgError = "Veuillez saisir un contenu à votre message";
             } else {
                 const connection = this.$axios.create({ headers: { Authorization: "Bearer " + localStorage.getItem("token") } })
