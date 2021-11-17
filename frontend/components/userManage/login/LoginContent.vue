@@ -71,6 +71,7 @@ export default {
 
     .icon {
         transform: translateY(25px);
+        color: #ccc;
     }
 
     .submit {

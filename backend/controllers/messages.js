@@ -23,7 +23,7 @@ exports.createMessage = (req, res, next) => {
                 } else {
                     attachmentURL == null
                 };
-                if ((content == 'null' && attachmentURL == null)) {
+                if ((content == null && attachmentURL == null)) {
                     res.status(400).json({ error: 'message content is empty' })
                 } else {
                     models.Message.create({
