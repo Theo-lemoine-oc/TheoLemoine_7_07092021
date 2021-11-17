@@ -2,28 +2,28 @@
     <main class="bg-gray-50 h-screen">
         <Navbar />
         <h1 class="text-center font-bold text-4xl my-8">Paramètres de votre compte</h1>
-        <div class="bg-white shadow-md w-1/2 mx-auto p-8 flex items-center rounded">
-            <div class="w-1/2">
-                <img src="~/assets/img/profil.jpg" alt="Photo de profil de l'utilisateur" class="w-40 rounded-full border border-black">
+        <div class="bg-white shadow-md w-11/12 md:flex-row flex-col lg:w-4/5 xl:w-3/5 2xl:w-1/2 mx-auto p-8 flex items-center rounded">
+            <div class="w-1/2 flex justify-center">
+                <img src="~/assets/img/profil.jpg" alt="Photo de profil de l'utilisateur" class="md:w-40 rounded-full border border-black">
             </div>
-            <div class="w-1/2">
-                <h2 class="font-bold text-xl mb-8">
+            <div class="w-1/2 mt-8 sm:mt-0">
+                <h2 class="font-bold text-xl mb-8 md:text-left text-center">
                     Modifier votre profil
                     <span v-if="user.isAdmin == true" class="block font-normal text-xs italic">Vous êtes Administrateur</span>
                 </h2>
                 <div class="flex flex-col justify-center">
-                    <ul class="w-2/3">
-                        <li class="flex justify-between items-center relative mb-4">
+                    <ul class=" w-full md:w-3/4">
+                        <li class="flex justify-between sm:flex-row flex-col items-center relative mb-4">
                             <span class="font-bold">Prénom :</span> {{ user.firstName }}
                         </li>
-                        <li class="flex justify-between items-center relative mb-4">
+                        <li class="flex justify-between sm:flex-row flex-col items-center relative mb-4">
                             <span class="font-bold">Nom :</span> {{ user.lastName }}
                         </li>
-                        <li class="flex justify-between items-center relative mb-4">
+                        <li class="flex justify-between sm:flex-row flex-col items-center relative mb-4">
                             <span class="font-bold">Adresse e-mail :</span> {{ user.email }}
                         </li>
-                        <li class="flex justify-between items-center relative mb-4">
-                            <span class="font-bold">Mot de passe :</span> •••••••••• <button v-on:click="editPassword = true" class="cursor-pointer absolute -right-10 text-red-500 hover:text-red-700 duration-300"><IconEdit /></button>
+                        <li class="flex justify-between sm:flex-row flex-col items-center relative mb-4">
+                            <span class="font-bold">Mot de passe :</span> •••••••••• <button v-on:click="editPassword = true" class="cursor-pointer sm:absolute -right-10 text-red-500 hover:text-red-700 duration-300"><IconEdit /></button>
                         </li>
                         <EditPassword @close-password="closePassword" v-if="editPassword" v-bind:key="user.id" :password="user.password" />
                     </ul>

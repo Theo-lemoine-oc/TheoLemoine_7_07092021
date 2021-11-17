@@ -1,5 +1,5 @@
 <template>
-    <Icon icon="user"/>
+    <Icon icon="home"/>
 </template>
 
 <script>

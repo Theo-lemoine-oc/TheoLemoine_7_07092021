@@ -1,22 +1,16 @@
 <template>
     <header>
             <!-- navbar content --> 
-            <nav class="bg-transparent shadow-md px-8">
-                <div class="mx-auto py-4">
-                    <div class="flex justify-between items-center">
-
-                        <!-- search bar -->
-                        <div class="w-1/5">
-                            <SearchBar />
-                        </div>
-
+            <nav class="shadow-md px-16 w-full">
+                <div class="mx-auto py-4 w-full">
+                    <div class="flex justify-between items-center flex-col md:flex-row">
                         <!-- logo -->
-                        <div class="w-1/5 flex justify-center">
+                        <div class="flex justify-center">
                             <Logo />
                         </div>
 
                         <!-- nav -->
-                        <div class="w-1/5">
+                        <div>
                             <NavContent />
                         </div>
                     </div>
@@ -26,13 +20,11 @@
 </template>
 
 <script>
-    import SearchBar from '~/components/navbar/SearchBar.vue';
     import Logo from '~/components/navbar/Logo.vue';
     import NavContent from '~/components/navbar/NavContent.vue';
 
     export default {
         components: {
-            SearchBar,
             Logo,
             NavContent
         }

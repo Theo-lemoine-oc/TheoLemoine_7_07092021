@@ -1,18 +1,21 @@
 <template>
     <div class="space-x-8 text-lg flex items-center">
-        <nuxt-link to="/" class="text-white duration-200 ease-linear">Accueil</nuxt-link>            
-        <nuxt-link to="/" class="text-white duration-200 ease-linear">Messages</nuxt-link>
-        <nuxt-link to="/me" class="text-white duration-200 ease-linear">Mon profil</nuxt-link>
-        <button type="button" @click="disconnectAccount" class="text-white duration-200 ease-linear"><IconDoor /></button>
+        <nuxt-link to="/" class="text-white duration-200 ease-linear text-xl"><IconHome /></nuxt-link>
+        <nuxt-link to="/me" class="text-white duration-200 ease-linear text-xl"><IconUser /></nuxt-link>
+        <button type="button" @click="disconnectAccount" class="text-white duration-200 ease-linear text-xl"><IconDoor /></button>
     </div>
 </template>
 
 <script>
 import IconDoor from '~/components/utils/icons/IconDoor.vue';
+import IconHome from '~/components/utils/icons/IconHome.vue';
+import IconUser from '~/components/utils/icons/IconUser.vue';
 
 export default {
     components: {
-        IconDoor
+        IconDoor,
+        IconHome,
+        IconUser
     },
     data() {
         return {

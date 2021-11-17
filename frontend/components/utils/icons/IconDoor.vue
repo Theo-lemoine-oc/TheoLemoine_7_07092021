@@ -11,9 +11,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-    .text-white:hover {
-        color: #00e1ff;
-    }
-</style>
